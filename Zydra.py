@@ -79,7 +79,7 @@ class Zydra():
     def white(self, string):
         return colored(string, "white")
 
-    def detect_file_type(file):
+    def detect_file_type(self, file):
 
         rar_type = b"Rar!\x1a\x07"
         zip_type = b"PK\x03\x04"
