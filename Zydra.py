@@ -17,6 +17,7 @@ import threading
 import shutil
 import subprocess
 from multiprocessing import Process, BoundedSemaphore, Queue, current_process, cpu_count
+import struct
 
 class Zydra():
     def __init__(self):
@@ -78,13 +79,21 @@ class Zydra():
     def white(self, string):
         return colored(string, "white")
 
-    def detect_file_type(self, file):
-        if str(file).split(".")[-1] == "rar":
-            return "rar"
-        elif str(file).split(".")[-1] == "zip":
+    def detect_file_type(file):
+
+        rar_type = b"Rar!\x1a\x07"
+        zip_type = b"PK\x03\x04"
+        pdf_type = b"%PDF"
+
+        with open(file, "rb") as f:
+            header = b"".join(struct.unpack("<6c", f.readline(6)))
+
+        if header[0:4] == zip_type:
             return "zip"
-        elif str(file).split(".")[-1] == "pdf":
+        elif header[0:4] == pdf_type:
             return "pdf"
+        elif header[0:6] == rar_type:
+            return "rar"
         else:
             return "text"
 
