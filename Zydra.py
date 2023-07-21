@@ -17,7 +17,7 @@ import threading
 import shutil
 import subprocess
 from multiprocessing import Process, BoundedSemaphore, Queue, current_process, cpu_count
-import struct
+from struct import unpack
 
 class Zydra():
     def __init__(self):
@@ -86,7 +86,7 @@ class Zydra():
         pdf_type = b"%PDF"
 
         with open(file, "rb") as f:
-            header = b"".join(struct.unpack("<6c", f.readline(6)))
+            header = b"".join(unpack("<6c", f.readline(6)))
 
         if header[0:4] == zip_type:
             return "zip"
